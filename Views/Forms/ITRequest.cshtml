@@ -1,0 +1,240 @@
+﻿@model FormToPDF.Models.ITRequest
+@{
+    ViewBag.Title = "ITRequest";
+}
+
+<h2>IT Request</h2>
+
+@using (Html.BeginForm("HandleITRequest", "Forms"))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <div class="form-group">
+            @Html.LabelFor(model => model.name, "Name", htmlAttributes: new { @class = "control -label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.empNum, "Employee Number", htmlAttributes: new { @class = "control -label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.empNum, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.empNum, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.manager, "Requesting Manager", htmlAttributes: new { @class = "control -label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.manager, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.manager, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.contact, "Contact Number", htmlAttributes: new { @class = "control -label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.contact, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.contact, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.location, "Concept/Location", htmlAttributes: new { @class = "control -label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.location, new SelectList(Model.getLocations, "Value", "Text"), new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.location, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.status, "Status", htmlAttributes: new { @class = "control -label col-md-2" })
+            <div class="col-md-10">
+                @Html.RadioButtonFor(m => m.status, "NewHire", true) New Hire &ensp;
+                @Html.RadioButtonFor(m => m.status, "Existing", false) Existing &ensp;
+                @Html.RadioButtonFor(m => m.status, "Transfer", false) Transfer
+                @Html.ValidationMessageFor(model => model.status, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.address, "Ship‐To Address", htmlAttributes: new { @class = "control -label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.address, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.address, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.priority, "Priority", htmlAttributes: new { @class = "control -label col-md-2" })
+            <div class="col-md-10">
+                @Html.RadioButtonFor(m => m.priority, "Low", true) Low &ensp;
+                @Html.RadioButtonFor(m => m.priority, "Medium", false) Medium &ensp;
+                @Html.RadioButtonFor(m => m.priority, "High", false) High
+                @Html.ValidationMessageFor(model => model.priority, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.tempDesired, "Date Desired", htmlAttributes: new { @class = "control -label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.tempDesired, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.tempDesired, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.request, "Request Category", htmlAttributes: new { @class = "control -label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(m => m.request, new List<SelectListItem>
+                {
+                    new SelectListItem{Text = "Desktop Computer", Value = "Desktop"},
+                    new SelectListItem{Text = "Laptop Computer", Value = "Laptop"},
+                    new SelectListItem{Text = "Misc. Hardware", Value = "Hardware"},
+                    new SelectListItem{Text = "Application(s)", Value = "App"},
+                    new SelectListItem{Text = "Other", Value = "Other"}
+                }, new { id = "Request", htmlAttributes = new { @class = "form-control" } })
+
+                @Html.ValidationMessageFor(model => model.request, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div id="desktopGroup">
+            <div class="form-group">
+                @Html.LabelFor(model => model.condition, "Desktop Condition", htmlAttributes: new { @class = "control -label col-md-2" })
+                <div class="col-md-10">
+                    @Html.RadioButtonFor(m => m.condition, "New", true) New &ensp;
+                    @Html.RadioButtonFor(m => m.condition, "Replacement", false) Replacement <br />
+                    @Html.ValidationMessageFor(model => model.condition, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.dSpecs, "Desktop Specifications", htmlAttributes: new { @class = "control -label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.dSpecs, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.dSpecs, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div id="laptopGroup">
+            <div class="form-group">
+                @Html.LabelFor(model => model.condition, "Laptop Condition", htmlAttributes: new { @class = "control -label col-md-2" })
+                <div class="col-md-10">
+                    @Html.RadioButtonFor(m => m.condition, "New", true) New &ensp;
+                    @Html.RadioButtonFor(m => m.condition, "Replacement", false) Replacement &ensp;
+                    @Html.RadioButtonFor(m => m.condition, "Loaner", false) Loaner <br />
+                    @Html.ValidationMessageFor(model => model.condition, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.tempReturn, "Laptop Return Date", htmlAttributes: new { @class = "control -label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.tempReturn, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.tempReturn, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.lSpecs, "Laptop Specifications", htmlAttributes: new { @class = "control -label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.lSpecs, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.lSpecs, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group" id="hardwareGroup">
+            @Html.LabelFor(model => model.hardware, "Hardware", htmlAttributes: new { @class = "control -label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.hardware, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.hardware, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group" id="appGroup">
+            @Html.LabelFor(model => model.app, "Application", htmlAttributes: new { @class = "control -label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.app, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.app, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group" id="otherGroup">
+            @Html.LabelFor(model => model.other, "Other", htmlAttributes: new { @class = "control -label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.other, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.other, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.comments, "Comments", htmlAttributes: new { @class = "control -label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.comments, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.comments, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "/Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+            $(function() {
+                $("#Request").on("change", function() {
+                    if ($("#Request").val() == "Desktop") {
+                        $("#desktopGroup").show();
+                        $("#laptopGroup").hide();
+                        $("#hardwareGroup").hide();
+                        $("#appGroup").hide();
+                        $("#otherGroup").hide();
+                    } else if ($("#Request").val() == "Laptop") {
+                        $("#desktopGroup").hide();
+                        $("#laptopGroup").show();
+                        $("#hardwareGroup").hide();
+                        $("#appGroup").hide();
+                        $("#otherGroup").hide();
+                    } else if ($("#Request").val() == "Hardware") {
+                        $("#desktopGroup").hide();
+                        $("#laptopGroup").hide();
+                        $("#hardwareGroup").show();
+                        $("#appGroup").hide();
+                        $("#otherGroup").hide();
+                    } else if ($("#Request").val() == "App") {
+                        $("#desktopGroup").hide();
+                        $("#laptopGroup").hide();
+                        $("#hardwareGroup").hide();
+                        $("#appGroup").show();
+                        $("#otherGroup").hide();
+                    } else if ($("#Request").val() == "Other") {
+                        $("#desktopGroup").hide();
+                        $("#laptopGroup").hide();
+                        $("#hardwareGroup").hide();
+                        $("#appGroup").hide();
+                        $("#otherGroup").show();
+                    }
+                });
+                $("#Request").trigger("change");
+            });
+    </script>
+}
+
+
+
+
